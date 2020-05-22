@@ -1,7 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "sdlHasieratu.h"
-#include "irudiak.h"
-#include "kontrolak.h"
 #include "funtzioak.h"
 
 int main(int argc, char** argv) {

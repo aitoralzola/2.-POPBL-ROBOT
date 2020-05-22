@@ -1,7 +1,9 @@
 #include "kontrolak.h"
 #include "sdlHasieratu.h"
+#include "funtzioak.h"
 
 SDL_Event event;
+POSIZIOA saguPos;
 
 int ebentuaJasoGertatuBada()
 {
@@ -69,6 +71,12 @@ int ebentuaJasoGertatuBada()
                 ret = event.button.button;
                 break;
             }
+            break;
+        case SDL_MOUSEMOTION:
+            //ALDAGIA OROKOR BATEN EZARRIKO DUGU X ETA Y GERO FUNZTIO BATEKIN IRAKURTZEKO AZKEN EBENTUAREN POSIZIOA
+            saguPos.x = event.motion.x;
+            saguPos.y = event.motion.y;
+            ret = SAGU_MUGIMENDUA;
             break;
 
         }

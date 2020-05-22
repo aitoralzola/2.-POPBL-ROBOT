@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{0364A582-F20C-4405-B3C7-DB6DDA4E770E}</ProjectGuid>
+    <ProjectGuid>{D2BEBDC3-11E6-45FA-98A2-33C263F3F60D}</ProjectGuid>
     <RootNamespace>PBLROBOT</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\include;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\include;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\lib\x86;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\include;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\include;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\include;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\include;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\lib\x86;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\include;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\include;C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\include;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Windows\SysWOW64\SDL\SDL2_image-devel-2.0.4-VC\SDL2_image-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_mixer-devel-2.0.4-VC\SDL2_mixer-2.0.4\lib\x86;C:\Windows\SysWOW64\SDL\SDL2-devel-2.0.9-VC\SDL2-2.0.9\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf-2.0.14\lib\x86;C:\Windows\SysWOW64\SDL\SDL2_ttf\VisualC\external\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

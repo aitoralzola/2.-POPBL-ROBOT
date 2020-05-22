@@ -15,7 +15,7 @@
 #define SCREEN_HEIGHT 800
 #define GAME_OVER -1
 
-SDL_Renderer* gRenderer;
+SDL_Renderer * gRenderer;
 
 int SDLHasi();
 int irudiaMarraztu(SDL_Texture* texture, SDL_Rect* pDest);
