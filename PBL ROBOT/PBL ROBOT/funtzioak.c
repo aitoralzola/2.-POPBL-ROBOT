@@ -6,28 +6,37 @@
 
 POSIZIOA saguPos;
 
-int V, cost[20][20], src = 0, end;
-int distance[20], parent[20], visited[20] = { 0 };
+int V, **cost, src = 0, end;
+int *distance, *parent, *visited;
 
 int hasiPrograma() {
     int itxi = 0, menu, ebentua;
+    POSIZIOA saguPos;
 
     menu = irudiaSortu(MENU);
     irudiakMarraztu();
     SDL_RenderPresent(gRenderer);
 
-    ebentua = ebentuaJasoGertatuBada();
-    if (ebentua == TECLA_0) {
+    do {
+        ebentua = ebentuaJasoGertatuBada();
+        saguPos = saguarenPosizioa();
+    } while (ebentua != SAGU_BOTOIA_EZKERRA);
+
+    if (ebentua == SAGU_BOTOIA_EZKERRA && saguPos.x > 250 && saguPos.x < 455 && saguPos.y>170 && saguPos.y < 195) {
         irudiaKendu(menu);
         pantailaGarbitu();
         barrua();
     }
-    if (ebentua == TECLA_1) {
+    if (ebentua == SAGU_BOTOIA_EZKERRA && saguPos.x > 250 && saguPos.x < 455 && saguPos.y > 195 && saguPos.y < 220) {
         irudiaKendu(menu);
         pantailaGarbitu();
         terraza();
     }
-    if (ebentua == TECLA_ESCAPE) itxi = -1;
+    if (ebentua == SAGU_BOTOIA_EZKERRA && saguPos.x > 250 && saguPos.x < 455 && saguPos.y > 220 && saguPos.y < 245) {
+        irudiaKendu(menu);
+        pantailaGarbitu();
+        itxi = -1;
+    }
 
     return itxi;
 }
@@ -49,6 +58,7 @@ void barrua() {
     dijkstra();
     end = mahaiaItzuliBarruan();
     pantailaratu();
+    memoriaGarbitu();
 
     do {
         itxi = ebentuaJasoGertatuBada();
@@ -83,21 +93,6 @@ void terraza() {
         irudiaKendu(terraza);
         irudiaKendu(robot);
         pantailaGarbitu();
-    }
-}
-
-void matrizeaOsatu(char* str) {
-    FILE* fp;
-
-    fp = fopen(str, "r");
-    if (fp != NULL) {
-        for (int i = 0; i < V; i++) {
-            for (int j = 0; j < V; j++) {
-                fscanf(fp, "%d", &cost[i][j]);
-                if (cost[i][j] == 0)
-                    cost[i][j] = 999;
-            }
-        }
     }
 }
 
@@ -136,6 +131,31 @@ int mahaiaItzuliTerraza() {
     return mahai;
 }
 
+void memoriaErreserbatu() {
+    cost = (int**)malloc(sizeof(int*) * V);
+    if (cost != NULL) {
+        for (int i = 0; i < V; i++) {
+            *(cost + i) = (int*)malloc(sizeof(int) * V);
+        }
+    }
+}
+
+void matrizeaOsatu(char* str) {
+    FILE* fp;
+
+    fp = fopen(str, "r");
+    if (fp != NULL) {
+        memoriaErreserbatu();
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                fscanf(fp, "%d", &cost[i][j]);
+                if (cost[i][j] == 0)
+                    cost[i][j] = INF;
+            }
+        }
+    }
+}
+
 int getNearest() {
     int minValue = INF;
     int minNode = 0;
@@ -155,7 +175,7 @@ void dijkstra() {
     init();
     for (int i = 0; i < V; i++) {
         nearest = getNearest();
-        visited[nearest] = 1;
+        *(visited + nearest) = 1;
 
         for (int adj = 0; adj < V; adj++) {
             if (cost[nearest][adj] != INF && distance[adj] > distance[nearest] + cost[nearest][adj]) {
@@ -168,11 +188,17 @@ void dijkstra() {
 
 void init() {
 
-    for (int i = 0; i < V; i++) {
-        distance[i] = INF;
-        parent[i] = 1;
+    visited = (int*)malloc(sizeof(int) * V);
+    parent = (int*)malloc(sizeof(int) * V);
+    distance = (int*)malloc(sizeof(int) * V);
+    if (visited != NULL && parent != NULL && distance != NULL) {
+        for (int i = 0; i < V; i++) {
+            *(visited + i) = 0;
+            *(distance + i) = INF;
+            *(parent + i) = 1;
+        }
+        *(distance + src) = 0;
     }
-    distance[src] = 0;
 }
 
 void pantailaratu() {
@@ -186,6 +212,16 @@ void pantailaratu() {
         parnode = parent[parnode];
     }
     printf("\n");
+}
+
+void memoriaGarbitu() {
+    for (int i = 0; i < V; i++) {
+        free(cost[i]);
+    }
+    free(cost);
+    free(parent);
+    free(visited);
+    free(distance);
 }
 
 POSIZIOA saguarenPosizioa() { return saguPos; }

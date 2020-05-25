@@ -4,6 +4,7 @@
 typedef struct Posizioa {
     int x;
     int y;
+    struct Posizioa* ptrHurrengoa;
 }POSIZIOA;
 
 #define INF 999
@@ -17,6 +18,8 @@ int getNearest();
 void dijkstra();
 void init();
 void pantailaratu();
+void memoriaErreserbatu();
+void memoriaGarbitu();
 POSIZIOA saguarenPosizioa();
 
 #endif

@@ -24,12 +24,12 @@ int SDLHasi()
     }
     else
     {
-        gMusic = Mix_LoadMUS(".\\Sounds\\mariobros.wav");
+        /*gMusic = Mix_LoadMUS(".\\Sounds\\mariobros.wav");
         if (gMusic == NULL)
         {
             printf("Ezin izan da musika kargatu. SDL_mixer Error: %s\n", Mix_GetError());
         }
-        Mix_PlayMusic(gMusic, -1);
+        Mix_PlayMusic(gMusic, -1);*/
 
         window = SDL_CreateWindow("MUrio Bros", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_HEIGHT, SCREEN_WIDTH, SDL_WINDOW_SHOWN);
         gRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);

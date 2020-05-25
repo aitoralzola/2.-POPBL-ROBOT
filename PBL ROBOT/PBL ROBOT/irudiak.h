@@ -2,13 +2,13 @@
 #ifndef IRUDIAK_H
 #define IRUDIAK_H
 
-#define MAX_IMG 500
+#define MAX_IMG 50
 
 //----------------------------------------------------------------
 #define BARRUALDEA ".\\IMG\\Barrualdea.bmp"
 #define TERRAZA ".\\IMG\\terraza.bmp"
 #define ROBOT ".\\IMG\\Errobota.bmp"
-#define MENU ".\\IMG\\hasiera0.bmp"
+#define MENU ".\\IMG\\MENU.bmp"
 
 
 typedef struct
