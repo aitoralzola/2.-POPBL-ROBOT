@@ -9,6 +9,7 @@
 #define TERRAZA ".\\IMG\\terraza.bmp"
 #define ROBOT ".\\IMG\\Errobota.bmp"
 #define MENU ".\\IMG\\MENU.bmp"
+#define PERTSONA ".\\IMG\\pertsona.bmp"
 
 
 typedef struct

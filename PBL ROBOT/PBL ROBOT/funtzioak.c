@@ -42,49 +42,44 @@ int hasiPrograma() {
 }
 
 void barrua() {
-    int itxi, barrua, robot;
-    char* str = { "matriz_barrualdea.txt" };
-
-    barrua = irudiaSortu(BARRUALDEA);
-    irudiakMarraztu();
-    SDL_RenderPresent(gRenderer);
-    robot = irudiaSortu(ROBOT);
-    irudiaMugitu(robot, 664, 80);
-    irudiakMarraztu();
-    SDL_RenderPresent(gRenderer);
-
+    MAHAIAK* burua = NULL, *ptrAux;
+    int itxi, fondoa, robot, pertsona;
+    char* str = { "matriz_barrualdea.txt" }, * mahaiak = { "mahaiak_barrualdea.txt" };
     V = 12;
+
+    irudiakJarri(&robot, &fondoa);
     matrizeaOsatu(str);
+    mahaienPosizioa(&burua, mahaiak);
     dijkstra();
     end = mahaiaItzuliBarruan();
-    pantailaratu();
-    memoriaGarbitu();
+    ptrAux = pertsonaMugitu(burua);
+    pertsonaKokatu(&pertsona, ptrAux);
+    pantailaratu(burua, &robot, end);
+    memoriaGarbitu(&burua);
 
     do {
         itxi = ebentuaJasoGertatuBada();
     } while (itxi != TECLA_ESCAPE);
     if (itxi == TECLA_ESCAPE) {
-        irudiaKendu(barrua);
-        irudiaKendu(robot);
-        pantailaGarbitu();
+        irudiakEzabatu(&pertsona, &fondoa, &robot);
     }
 }
 
 void terraza() {
-    int itxi, terraza, robot;
-    char* str = { "matriz_terraza.txt" };
-
-    terraza = irudiaSortu(TERRAZA);
-    irudiakMarraztu();
-    SDL_RenderPresent(gRenderer);
-    robot = irudiaSortu(ROBOT);
-    irudiakMarraztu();
-    SDL_RenderPresent(gRenderer);
-
+    MAHAIAK* burua = NULL, * ptrAux;
+    int itxi, terraza, robot, pertsona;
+    char* str = { "matriz_terraza.txt" }, * mahaiak = { "mahaiak_terraza.txt" };
     V = 7;
+    
+    irudiakJarri(&robot, &terraza);
     matrizeaOsatu(str);
-    init();
+    mahaienPosizioa(&burua, mahaiak);
     dijkstra();
+    end = mahaiaItzuliTerraza();
+    ptrAux = pertsonaMugitu(burua);
+    pertsonaKokatu(&pertsona, ptrAux);
+    pantailaratu(burua, &robot, end);
+    memoriaGarbitu(&burua);
 
     do {
         itxi = ebentuaJasoGertatuBada();
@@ -128,7 +123,37 @@ int mahaiaItzuliTerraza() {
         saguPos = saguarenPosizioa();
     } while (i != SAGU_BOTOIA_EZKERRA);
 
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 489) && (saguPos.x < 645) && (saguPos.y > 0) && (saguPos.y < 138)) mahai = 1;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 188) && (saguPos.x < 327) && (saguPos.y > 0) && (saguPos.y < 138)) mahai = 2;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 50) && (saguPos.x < 647) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 3;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 188) && (saguPos.x < 327) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 4;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 510) && (saguPos.x < 658) && (saguPos.y > 400) && (saguPos.y < 547)) mahai = 5;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 199) && (saguPos.x < 345) && (saguPos.y > 400) && (saguPos.y < 544)) mahai = 6;
+
     return mahai;
+}
+
+void mahaienPosizioa(MAHAIAK** burua, char* mahaiak) {
+    FILE* fp;
+    MAHAIAK* ptrAux;
+
+    fp = fopen(mahaiak, "r");
+    if (fp != NULL) {
+        do {
+            ptrAux = (MAHAIAK*)malloc(sizeof(MAHAIAK));
+            if (ptrAux != NULL) {
+                fscanf(fp, "%d %d", &ptrAux->x, &ptrAux->y);
+                ptrAux->ptrHurrengoa = NULL;
+                if (*burua == NULL) {
+                    *burua = ptrAux;
+                }
+                else {
+                    ptrAux->ptrHurrengoa = *burua;
+                    *burua = ptrAux;
+                }
+            }
+        } while (!feof(fp));
+    }
 }
 
 void memoriaErreserbatu() {
@@ -138,6 +163,9 @@ void memoriaErreserbatu() {
             *(cost + i) = (int*)malloc(sizeof(int) * V);
         }
     }
+    visited = (int*)malloc(sizeof(int) * V);
+    parent = (int*)malloc(sizeof(int) * V);
+    distance = (int*)malloc(sizeof(int) * V);
 }
 
 void matrizeaOsatu(char* str) {
@@ -187,22 +215,85 @@ void dijkstra() {
 }
 
 void init() {
+    for (int i = 0; i < V; i++) {
+        *(visited + i) = 0;
+        *(distance + i) = INF;
+        *(parent + i) = 1;
+    }
+    *(distance + src) = 0;
+}
 
-    visited = (int*)malloc(sizeof(int) * V);
-    parent = (int*)malloc(sizeof(int) * V);
-    distance = (int*)malloc(sizeof(int) * V);
-    if (visited != NULL && parent != NULL && distance != NULL) {
-        for (int i = 0; i < V; i++) {
-            *(visited + i) = 0;
-            *(distance + i) = INF;
-            *(parent + i) = 1;
-        }
-        *(distance + src) = 0;
+void memoriaGarbitu(MAHAIAK** burua) {
+    MAHAIAK* ptrAux, *aurrekoa;
+    for (int i = 0; i < V; i++) {
+        free(cost[i]);
+    }
+    free(cost);
+    free(parent);
+    free(visited);
+    free(distance);
+    ptrAux = *burua;
+    while (ptrAux != NULL) {
+        aurrekoa = ptrAux;
+        ptrAux = ptrAux->ptrHurrengoa;
+        free(aurrekoa);
     }
 }
 
-void pantailaratu() {
-    printf("Node:\t\tCost:\t\tPath:");
+MAHAIAK* pertsonaMugitu(MAHAIAK* burua) {
+    int kont = V - 1;
+    MAHAIAK* ptrAux;
+    ptrAux = burua;
+
+    while (kont > end && ptrAux != NULL) {
+        ptrAux = ptrAux->ptrHurrengoa;
+        kont--;
+    }
+    return ptrAux;
+}
+
+void irudiakJarri(int* robot, int* fondoa) {
+    if (V == 12) {
+        *fondoa = irudiaSortu(BARRUALDEA);
+        *robot = irudiaSortu(ROBOT);
+        irudiaMugitu(*robot, 604, -20);
+        irudiakMarraztu();
+        SDL_RenderPresent(gRenderer);
+    }
+    else {
+        *fondoa = irudiaSortu(TERRAZA);
+        *robot = irudiaSortu(ROBOT);
+        irudiaMugitu(*robot, 604, -20);
+        irudiakMarraztu();
+        SDL_RenderPresent(gRenderer);
+    }
+    
+}
+
+void pertsonaKokatu(int* pertsona, MAHAIAK* ptrAux) {
+    *pertsona = irudiaSortu(PERTSONA);
+    irudiaMugitu(*pertsona, ptrAux->x, ptrAux->y);
+    irudiakMarraztu();
+    SDL_RenderPresent(gRenderer);
+}
+
+void irudiakEzabatu(int* pertsona, int* fondoa, int* errobota) {
+    irudiaKendu(*pertsona);
+    irudiaKendu(*fondoa);
+    irudiaKendu(*errobota);
+    pantailaGarbitu();
+}
+
+void pantailaratu(MAHAIAK* buruMahai, int* robot, int end) {
+    /*int parnode;*/
+    MAHAIAK* ptrAuxM;
+
+    if (end != src) {
+        pantailaratu(buruMahai, robot, parent[end]);
+    }
+    ptrAuxM = mahaiaAurkitu(buruMahai, end);
+    mugimendua(ptrAuxM, robot);
+    /*printf("Node:\t\tCost:\t\tPath:");
 
     printf("\n%d\t\t%d\t\t ", end, distance[end]);
     printf("%d", end);
@@ -211,17 +302,55 @@ void pantailaratu() {
         printf(" <- %d ", parnode);
         parnode = parent[parnode];
     }
-    printf("\n");
+    printf("\n");*/
 }
 
-void memoriaGarbitu() {
-    for (int i = 0; i < V; i++) {
-        free(cost[i]);
+MAHAIAK* mahaiaAurkitu(MAHAIAK* buruMahai, int parnode) {
+    MAHAIAK* ptrAux = buruMahai;
+    int kont = V - 1;
+
+    while (kont > parnode) {
+        ptrAux = ptrAux->ptrHurrengoa;
+        kont--;
     }
-    free(cost);
-    free(parent);
-    free(visited);
-    free(distance);
+
+    return ptrAux;
+}
+
+void mugimendua(MAHAIAK* ptrAux, int* robot) {
+    static int aurrekoX = 640, aurrekoY = -20;
+
+    POSIZIOA pos;
+    pos.x = aurrekoX;
+    pos.y = aurrekoY;
+    
+    if (ptrAux != NULL) {
+        while (pos.x != ptrAux->x || pos.y != ptrAux->y) {
+            pos = mugitu(pos, ptrAux);
+            irudiaMugitu(*robot, pos.x, pos.y);
+            irudiakMarraztu();
+            SDL_RenderPresent(gRenderer);
+        }
+    }
+    aurrekoX = pos.x;
+    aurrekoY = pos.y;
+}
+
+POSIZIOA mugitu(POSIZIOA pos, MAHAIAK* ptrAux) {
+    if (pos.x > ptrAux->x) {
+        pos.x -= 1;
+    }
+    if (pos.x < ptrAux->x) {
+        pos.x += 1;
+    }
+    if (pos.y > ptrAux->y) {
+        pos.y -= 1;
+    }
+    if (pos.y < ptrAux->y) {
+        pos.y += 1;
+    }
+
+    return pos;
 }
 
 POSIZIOA saguarenPosizioa() { return saguPos; }
