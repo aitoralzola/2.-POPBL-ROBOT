@@ -27,4 +27,7 @@ int irudiarenPosizioaAurkitu(int id);
 void pantailaGarbitu();
 void irudiaMugitu(int numImg, int x, int y);
 void irudiakMarraztu();
+void irudiakJarri(int* robot, int* fondoa);
+void irudiakEzabatu(int* pertsona, int* fondoa, int* errobota);
+
 #endif

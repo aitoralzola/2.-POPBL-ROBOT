@@ -1,4 +1,5 @@
 #include "irudiak.h"
+#include "funtzioak.h"
 
 IMG irudiak[MAX_IMG];
 int irudiKop = 0;
@@ -105,4 +106,28 @@ int irudiaSortu(char* imgName)
     irudiakMarraztu();
 
     return img;
+}
+
+void irudiakJarri(int* robot, int* fondoa) {
+    if (V == 12) {
+        *fondoa = irudiaSortu(BARRUALDEA);
+        *robot = irudiaSortu(ROBOT);
+        irudiaMugitu(*robot, 660, 30);
+        irudiakMarraztu();
+        SDL_RenderPresent(gRenderer);
+    }
+    else {
+        *fondoa = irudiaSortu(TERRAZA);
+        *robot = irudiaSortu(ROBOT);
+        irudiaMugitu(*robot, 660, 30);
+        irudiakMarraztu();
+        SDL_RenderPresent(gRenderer);
+    }
+}
+
+void irudiakEzabatu(int* pertsona, int* fondoa, int* errobota) {
+    irudiaKendu(*pertsona);
+    irudiaKendu(*fondoa);
+    irudiaKendu(*errobota);
+    pantailaGarbitu();
 }

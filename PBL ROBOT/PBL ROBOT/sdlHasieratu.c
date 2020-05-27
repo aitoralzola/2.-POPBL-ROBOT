@@ -49,13 +49,13 @@ int SDLHasi()
 
 int irudiaMarraztu(SDL_Texture* texture, SDL_Rect* pDest)
 {
-    SDL_Rect src;
+    SDL_Rect source;
 
-    src.x = 0;
-    src.y = 0;
-    src.w = pDest->w;
-    src.h = pDest->h;
-    SDL_RenderCopy(gRenderer, texture, &src, pDest);
+    source.x = 0;
+    source.y = 0;
+    source.w = pDest->w;
+    source.h = pDest->h;
+    SDL_RenderCopy(gRenderer, texture, &source, pDest);
 
     return 0;
 }

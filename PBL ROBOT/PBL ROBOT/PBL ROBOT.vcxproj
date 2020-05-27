@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dijkstra.c" />
     <ClCompile Include="funtzioak.c" />
     <ClCompile Include="irudiak.c" />
     <ClCompile Include="kontrolak.c" />
@@ -139,6 +140,7 @@
     <ClCompile Include="sdlHasieratu.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dijkstra.h" />
     <ClInclude Include="funtzioak.h" />
     <ClInclude Include="irudiak.h" />
     <ClInclude Include="kontrolak.h" />

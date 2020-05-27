@@ -1,13 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "sdlHasieratu.h"
 #include "irudiak.h"
 #include "kontrolak.h"
 #include "funtzioak.h"
+#include "dijkstra.h"
 
 POSIZIOA saguPos;
-
-int V, **cost, src = 0, end;
-int *distance, *parent, *visited;
 
 int hasiPrograma() {
     int itxi = 0, menu, ebentua;
@@ -42,18 +43,22 @@ int hasiPrograma() {
 }
 
 void barrua() {
-    MAHAIAK* burua = NULL, *ptrAux;
-    int itxi, fondoa, robot, pertsona;
-    char* str = { "matriz_barrualdea.txt" }, * mahaiak = { "mahaiak_barrualdea.txt" };
-    V = 12;
+    MAHAIAK* burua = NULL;
+    PERTSONAK* pertson = NULL, *ptrAuxP;
+    int itxi, fondoa, robot, per;
+    char* str = { "matriz_barrualdea.txt" }, * mahaiak = { "robot_barrualdea.txt" }, * pertsona = {"pertsona_barrualdea.txt"};
+    V = 12, hasi = 0;
 
     irudiakJarri(&robot, &fondoa);
     matrizeaOsatu(str);
     mahaienPosizioa(&burua, mahaiak);
+    pertsonenPosizioa(&pertson, pertsona);
     dijkstra();
-    end = mahaiaItzuliBarruan();
-    ptrAux = pertsonaMugitu(burua);
-    pertsonaKokatu(&pertsona, ptrAux);
+    do {
+        end = mahaiaItzuliBarruan();
+    } while (end == 0);
+    posizioaAurkitu(pertson, &ptrAuxP);
+    pertsonaKokatu(&per, ptrAuxP);
     pantailaratu(burua, &robot, end);
     memoriaGarbitu(&burua);
 
@@ -61,23 +66,27 @@ void barrua() {
         itxi = ebentuaJasoGertatuBada();
     } while (itxi != TECLA_ESCAPE);
     if (itxi == TECLA_ESCAPE) {
-        irudiakEzabatu(&pertsona, &fondoa, &robot);
+        irudiakEzabatu(&per, &fondoa, &robot);
     }
 }
 
 void terraza() {
-    MAHAIAK* burua = NULL, * ptrAux;
-    int itxi, terraza, robot, pertsona;
-    char* str = { "matriz_terraza.txt" }, * mahaiak = { "mahaiak_terraza.txt" };
-    V = 7;
+    MAHAIAK* burua = NULL;
+    PERTSONAK* pertson = NULL, *ptrAuxP;
+    int itxi, fondo, robot, per;
+    char* str = { "matriz_terraza.txt" }, * mahaiak = { "robot_terraza.txt" }, * pertsona = { "pertsona_terraza.txt" };
+    V = 7, hasi = 0;
     
-    irudiakJarri(&robot, &terraza);
+    irudiakJarri(&robot, &fondo);
     matrizeaOsatu(str);
     mahaienPosizioa(&burua, mahaiak);
+    pertsonenPosizioa(&pertson, pertsona);
     dijkstra();
-    end = mahaiaItzuliTerraza();
-    ptrAux = pertsonaMugitu(burua);
-    pertsonaKokatu(&pertsona, ptrAux);
+    do {
+        end = mahaiaItzuliTerraza();
+    } while (end == 0);
+    posizioaAurkitu(pertson, &ptrAuxP);
+    pertsonaKokatu(&per, ptrAuxP);
     pantailaratu(burua, &robot, end);
     memoriaGarbitu(&burua);
 
@@ -85,9 +94,7 @@ void terraza() {
         itxi = ebentuaJasoGertatuBada();
     } while (itxi != TECLA_ESCAPE);
     if (itxi == TECLA_ESCAPE) {
-        irudiaKendu(terraza);
-        irudiaKendu(robot);
-        pantailaGarbitu();
+        irudiakEzabatu(&per, &fondo, &robot);
     }
 }
 
@@ -125,10 +132,10 @@ int mahaiaItzuliTerraza() {
 
     if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 489) && (saguPos.x < 645) && (saguPos.y > 0) && (saguPos.y < 138)) mahai = 1;
     if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 188) && (saguPos.x < 327) && (saguPos.y > 0) && (saguPos.y < 138)) mahai = 2;
-    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 50) && (saguPos.x < 647) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 3;
-    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 188) && (saguPos.x < 327) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 4;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 188) && (saguPos.x < 327) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 3;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 199) && (saguPos.x < 345) && (saguPos.y > 400) && (saguPos.y < 544)) mahai = 4;
     if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 510) && (saguPos.x < 658) && (saguPos.y > 400) && (saguPos.y < 547)) mahai = 5;
-    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 199) && (saguPos.x < 345) && (saguPos.y > 400) && (saguPos.y < 544)) mahai = 6;
+    if ((i == SAGU_BOTOIA_EZKERRA) && (saguPos.x > 505) && (saguPos.x < 647) && (saguPos.y > 200) && (saguPos.y < 353)) mahai = 6;
 
     return mahai;
 }
@@ -156,6 +163,29 @@ void mahaienPosizioa(MAHAIAK** burua, char* mahaiak) {
     }
 }
 
+void pertsonenPosizioa(PERTSONAK** burua, char* pertsona) {
+    FILE* fp;
+    PERTSONAK* ptrAux;
+
+    fp = fopen(pertsona, "r");
+    if (fp != NULL) {
+        do {
+            ptrAux = (PERTSONAK*)malloc(sizeof(PERTSONAK));
+            if (ptrAux != NULL) {
+                fscanf(fp, "%d %d", &ptrAux->x, &ptrAux->y);
+                ptrAux->ptrHurrengoa = NULL;
+                if (*burua == NULL) {
+                    *burua = ptrAux;
+                }
+                else {
+                    ptrAux->ptrHurrengoa = *burua;
+                    *burua = ptrAux;
+                }
+            }
+        } while (!feof(fp));
+    }
+}
+
 void memoriaErreserbatu() {
     cost = (int**)malloc(sizeof(int*) * V);
     if (cost != NULL) {
@@ -166,61 +196,6 @@ void memoriaErreserbatu() {
     visited = (int*)malloc(sizeof(int) * V);
     parent = (int*)malloc(sizeof(int) * V);
     distance = (int*)malloc(sizeof(int) * V);
-}
-
-void matrizeaOsatu(char* str) {
-    FILE* fp;
-
-    fp = fopen(str, "r");
-    if (fp != NULL) {
-        memoriaErreserbatu();
-        for (int i = 0; i < V; i++) {
-            for (int j = 0; j < V; j++) {
-                fscanf(fp, "%d", &cost[i][j]);
-                if (cost[i][j] == 0)
-                    cost[i][j] = INF;
-            }
-        }
-    }
-}
-
-int getNearest() {
-    int minValue = INF;
-    int minNode = 0;
-
-    for (int i = 0; i < V; i++) {
-        if (distance[i] < minValue && visited[i] == 0) {
-            minValue = distance[i];
-            minNode = i;
-        }
-    }
-    return minNode;
-}
-
-void dijkstra() {
-    int nearest;
-    
-    init();
-    for (int i = 0; i < V; i++) {
-        nearest = getNearest();
-        *(visited + nearest) = 1;
-
-        for (int adj = 0; adj < V; adj++) {
-            if (cost[nearest][adj] != INF && distance[adj] > distance[nearest] + cost[nearest][adj]) {
-                distance[adj] = distance[nearest] + cost[nearest][adj];
-                parent[adj] = nearest;
-            }
-        }
-    }
-}
-
-void init() {
-    for (int i = 0; i < V; i++) {
-        *(visited + i) = 0;
-        *(distance + i) = INF;
-        *(parent + i) = 1;
-    }
-    *(distance + src) = 0;
 }
 
 void memoriaGarbitu(MAHAIAK** burua) {
@@ -240,76 +215,40 @@ void memoriaGarbitu(MAHAIAK** burua) {
     }
 }
 
-MAHAIAK* pertsonaMugitu(MAHAIAK* burua) {
+void posizioaAurkitu(PERTSONAK* buruaP, PERTSONAK** ptrAuxP) {
     int kont = V - 1;
-    MAHAIAK* ptrAux;
-    ptrAux = burua;
 
-    while (kont > end && ptrAux != NULL) {
-        ptrAux = ptrAux->ptrHurrengoa;
+    *ptrAuxP = buruaP;
+
+    while (kont > end && *ptrAuxP != NULL) {
+        buruaP = buruaP->ptrHurrengoa;
+        *ptrAuxP = buruaP;
         kont--;
     }
-    return ptrAux;
 }
 
-void irudiakJarri(int* robot, int* fondoa) {
-    if (V == 12) {
-        *fondoa = irudiaSortu(BARRUALDEA);
-        *robot = irudiaSortu(ROBOT);
-        irudiaMugitu(*robot, 604, -20);
-        irudiakMarraztu();
-        SDL_RenderPresent(gRenderer);
-    }
-    else {
-        *fondoa = irudiaSortu(TERRAZA);
-        *robot = irudiaSortu(ROBOT);
-        irudiaMugitu(*robot, 604, -20);
-        irudiakMarraztu();
-        SDL_RenderPresent(gRenderer);
-    }
-    
-}
-
-void pertsonaKokatu(int* pertsona, MAHAIAK* ptrAux) {
+void pertsonaKokatu(int* pertsona, PERTSONAK* ptrAux) {
     *pertsona = irudiaSortu(PERTSONA);
     irudiaMugitu(*pertsona, ptrAux->x, ptrAux->y);
     irudiakMarraztu();
     SDL_RenderPresent(gRenderer);
 }
 
-void irudiakEzabatu(int* pertsona, int* fondoa, int* errobota) {
-    irudiaKendu(*pertsona);
-    irudiaKendu(*fondoa);
-    irudiaKendu(*errobota);
-    pantailaGarbitu();
-}
-
 void pantailaratu(MAHAIAK* buruMahai, int* robot, int end) {
-    /*int parnode;*/
     MAHAIAK* ptrAuxM;
 
-    if (end != src) {
+    if (end != hasi) {
         pantailaratu(buruMahai, robot, parent[end]);
     }
     ptrAuxM = mahaiaAurkitu(buruMahai, end);
     mugimendua(ptrAuxM, robot);
-    /*printf("Node:\t\tCost:\t\tPath:");
-
-    printf("\n%d\t\t%d\t\t ", end, distance[end]);
-    printf("%d", end);
-    int parnode = parent[end];
-    while (parnode != src) {
-        printf(" <- %d ", parnode);
-        parnode = parent[parnode];
-    }
-    printf("\n");*/
 }
 
-MAHAIAK* mahaiaAurkitu(MAHAIAK* buruMahai, int parnode) {
+MAHAIAK* mahaiaAurkitu(MAHAIAK* buruMahai, int node) {
     MAHAIAK* ptrAux = buruMahai;
     int kont = V - 1;
 
-    while (kont > parnode) {
+    while (kont > node) {
         ptrAux = ptrAux->ptrHurrengoa;
         kont--;
     }
@@ -318,9 +257,13 @@ MAHAIAK* mahaiaAurkitu(MAHAIAK* buruMahai, int parnode) {
 }
 
 void mugimendua(MAHAIAK* ptrAux, int* robot) {
-    static int aurrekoX = 640, aurrekoY = -20;
-
+    static int aurrekoX, aurrekoY;
     POSIZIOA pos;
+
+    if (ptrAux == NULL) {
+        aurrekoX = 660;
+        aurrekoY = 30;
+    }
     pos.x = aurrekoX;
     pos.y = aurrekoY;
     
